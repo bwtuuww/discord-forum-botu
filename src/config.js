@@ -1,5 +1,5 @@
 module.exports = {
-  token: '',
+  token: 'MTM5OTUwMjA1MTU1MzE4MTc3Ng.GSgiSi.AvKA4VxPuSk9xqgq6XYH05iKSZCFs8bhG9pgQs',
   clientId: '1399502051553181776',
   guildId: '1256886023129006191',
   

@@ -27,9 +27,9 @@ async function sendLog(client, options) {
 
     // Log embed'i oluştur
     const logEmbed = new EmbedBuilder()
-      .setColor(color || 0x0099FF)
+      .setColor(color || 0x2F3136)
       .setTitle(title)
-      .setDescription(description ? `\`\`\`yaml\n${description}\n\`\`\`` : null)
+      .setDescription(description ? `> ${description}` : null)
       .setTimestamp();
 
     // Thumbnail varsa ekle
@@ -75,16 +75,20 @@ async function logBlock(client, data) {
   } = data;
 
   await sendLog(client, {
-    title: '🔒 Kullanıcı Engellendi',
-    description: `Kullanıcı: ${targetUser.username} (${targetUser.id})\nSebep: ${reason}`,
-    color: 0xFF0000, // Kırmızı
+    title: 'Kullanıcı Engellendi',
+    description: `<@${targetUser.id}> kullanıcısına forum engeli uygulandı.`,
+    color: 0x2F3136, // Gri
     thumbnailUrl: targetUser.displayAvatarURL(),
     imageUrl: imageUrl, // Kanıt fotoğrafı
     fields: [
-      { name: 'Sunucu', value: `\`\`\`yaml\n${guild.name}\n\`\`\``, inline: true },
-      { name: 'Forum', value: `\`\`\`yaml\n${channel.name}\n\`\`\``, inline: true },
-      { name: 'Engeli Koyan', value: `\`\`\`yaml\n${executor.id}\n${executor.username}\n\`\`\``, inline: true },
-      { name: 'Tarih', value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
+      // Üst satır (kod bloğu ile)
+      { name: 'Kullanıcı', value: `\`\`\`ini\n${targetUser.username}\n\`\`\``, inline: true },
+      { name: 'Sebep', value: `\`\`\`ini\n${reason || 'Belirtilmedi'}\n\`\`\``, inline: true },
+      { name: 'Forum', value: `\`\`\`ini\n${channel.name}\n\`\`\``, inline: true },
+      
+      // Alt satır (normal)
+      { name: 'Engeli Koyan', value: `<@${executor.id}>`, inline: true },
+      { name: 'Tarih', value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: true }
     ],
     footer: `Forum ID: ${channel.id}`
   });
@@ -105,15 +109,19 @@ async function logUnblock(client, data) {
   } = data;
 
   await sendLog(client, {
-    title: '🔓 Kullanıcı Engeli Kaldırıldı',
-    description: `Kullanıcı: ${targetUser.username} (${targetUser.id})\nSebep: ${reason}`,
-    color: 0x00FF00, // Yeşil
+    title: 'Engel Kaldırıldı',
+    description: `<@${targetUser.id}> kullanıcısının forum engeli kaldırıldı.`,
+    color: 0x2F3136, // Gri
     thumbnailUrl: targetUser.displayAvatarURL(),
     fields: [
-      { name: 'Sunucu', value: `\`\`\`yaml\n${guild.name}\n\`\`\``, inline: true },
-      { name: 'Forum', value: `\`\`\`yaml\n${channel.name}\n\`\`\``, inline: true },
-      { name: 'Engeli Kaldıran', value: `\`\`\`yaml\n${executor.id}\n${executor.username}\n\`\`\``, inline: true },
-      { name: 'Tarih', value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: false }
+      // Üst satır (kod bloğu ile)
+      { name: 'Kullanıcı', value: `\`\`\`ini\n${targetUser.username}\n\`\`\``, inline: true },
+      { name: 'Sebep', value: `\`\`\`ini\n${reason || 'Belirtilmedi'}\n\`\`\``, inline: true },
+      { name: 'Forum', value: `\`\`\`ini\n${channel.name}\n\`\`\``, inline: true },
+      
+      // Alt satır (normal)
+      { name: 'Engeli Kaldıran', value: `<@${executor.id}>`, inline: true },
+      { name: 'Tarih', value: `<t:${Math.floor(Date.now() / 1000)}:F>`, inline: true }
     ],
     footer: `Forum ID: ${channel.id}`
   });

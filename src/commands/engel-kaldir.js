@@ -22,9 +22,9 @@ module.exports = {
     const forumValidation = validateForumChannel(interaction);
     if (!forumValidation.success) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Hata')
-        .setDescription(`\`\`\`yaml\n${forumValidation.message}\n\`\`\``)
+        .setColor(0x2F3136)
+        .setTitle('Uyarı')
+        .setDescription(`> ${forumValidation.message}`)
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -34,9 +34,9 @@ module.exports = {
 
     if (!isForumOwnerOrAdmin(interaction, channel)) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Yetersiz Yetki')
-        .setDescription('```yaml\nBu komutu kullanmak için forum sahibi veya yönetici olmalısınız.\n```')
+        .setColor(0x2F3136)
+        .setTitle('İşlem Geçersiz')
+        .setDescription('> Bu komutu kullanmak için forum sahibi veya yönetici olmalısınız.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -53,9 +53,9 @@ module.exports = {
 
       if (!existingBlock) {
         const errorEmbed = new EmbedBuilder()
-          .setColor(0xFF0000)
-          .setTitle('❌ Engel Bulunamadı')
-          .setDescription(`\`\`\`yaml\n${targetUser.username} kullanıcısı bu forumda engellenmiş değil.\n\`\`\``)
+          .setColor(0x2F3136)
+          .setTitle('İşlem Geçersiz')
+          .setDescription(`> ${targetUser.username} kullanıcısı bu forumda engellenmiş değil.`)
           .setTimestamp();
         
         return interaction.editReply({ embeds: [errorEmbed] });
@@ -67,16 +67,24 @@ module.exports = {
       });
 
       const successEmbed = new EmbedBuilder()
-        .setColor(0x00FF00)
-        .setTitle('✅ Engel Kaldırıldı')
-        .setDescription(`\`\`\`yaml\nKullanıcı: ${targetUser.username}\nSebep: ${reason}\n\nForum engeli başarıyla kaldırıldı.\n\`\`\``)
-        .setThumbnail(targetUser.displayAvatarURL())
-        .addFields(
-          { name: 'Forum', value: channel.name, inline: true },
-          { name: 'Engeli Kaldıran', value: `<@${interaction.user.id}>`, inline: true },
-          { name: 'Tarih', value: `<t:${Math.floor(Date.now() / 1000)}:R>`, inline: true }
-        )
-        .setTimestamp();
+      .setColor(0x2F3136)
+      .setTitle('Engel Kaldırıldı ')
+      .setDescription(`> <@${targetUser.id}> kullanıcısının forum engeli başarıyla kaldırıldı.`)
+      .setThumbnail(targetUser.displayAvatarURL())
+      .addFields(
+        // Üst satır (ini bloklu)
+        { name: 'Kullanıcı', value: `\`\`\`ini\n${targetUser.username} \n\`\`\``, inline: true },
+        { name: 'Sebep', value: `\`\`\`ini\n${reason || 'Belirtilmedi'}\n\`\`\``, inline: true },
+        { name: 'Forum', value: `\`\`\`ini\n${channel.name}\n\`\`\``, inline: true },
+    
+        // Alt satır (normal)
+        { name: 'Engeli Kaldıran', value: `<@${interaction.user.id}>`, inline: true },
+        { name: 'Tarih', value: `<t:${Math.floor(Date.now() / 1000)}:R>`, inline: true }
+      )
+      .setTimestamp();
+    
+    
+    
 
       await logUnblock(interaction.client, {
         targetUser: targetUser,
@@ -91,9 +99,9 @@ module.exports = {
     } catch (error) {
       console.error('Engel kaldırma hatası:', error);
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Sistem Hatası')
-        .setDescription('```yaml\nKullanıcının engeli kaldırılırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.\n```')
+        .setColor(0x2F3136)
+        .setTitle('Uyarı')
+        .setDescription('> Kullanıcının engeli kaldırılırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });

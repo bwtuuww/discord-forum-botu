@@ -27,9 +27,9 @@ module.exports = {
     const forumValidation = validateForumChannel(interaction);
     if (!forumValidation.success) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Hata')
-        .setDescription(`\`\`\`yaml\n${forumValidation.message}\n\`\`\``)
+        .setColor(0x2F3136)
+        .setTitle('Uyarı')
+        .setDescription(`> ${forumValidation.message}`)
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -39,9 +39,9 @@ module.exports = {
 
     if (!isForumOwnerOrAdmin(interaction, channel)) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Yetersiz Yetki')
-        .setDescription('```yaml\nBu komutu kullanmak için forum sahibi veya yönetici olmalısınız.\n```')
+        .setColor(0x2F3136)
+        .setTitle('İşlem Geçersiz')
+        .setDescription('> Bu komutu kullanmak için forum sahibi veya yönetici olmalısınız.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -53,9 +53,9 @@ module.exports = {
 
     if (photo && !photo.contentType.startsWith('image/')) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Hata')
-        .setDescription('```yaml\nLütfen bir resim dosyası yükleyin.\n```')
+        .setColor(0x2F3136)
+        .setTitle('Uyarı')
+        .setDescription('> Lütfen bir resim dosyası yükleyin.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -63,9 +63,9 @@ module.exports = {
 
     if (targetUser.id === interaction.user.id) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Hata')
-        .setDescription('```yaml\nKendinizi engelleyemezsiniz.\n```')
+        .setColor(0x2F3136)
+        .setTitle('İşlem Geçersiz')
+        .setDescription('> Kendinizi engelleyemezsiniz.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -73,9 +73,9 @@ module.exports = {
 
     if (targetUser.bot) {
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Hata')
-        .setDescription('```yaml\nBotları engelleyemezsiniz.\n```')
+        .setColor(0x2F3136)
+        .setTitle('İşlem Geçersiz')
+        .setDescription('> Botları engelleyemezsiniz.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });
@@ -86,9 +86,9 @@ module.exports = {
       
       if (!targetMember) {
         const errorEmbed = new EmbedBuilder()
-          .setColor(0xFF0000)
-          .setTitle('❌ Kullanıcı Bulunamadı')
-          .setDescription('```yaml\nKullanıcı sunucuda bulunamadı.\n```')
+          .setColor(0x2F3136)
+          .setTitle('Sonuç Bulunamadı')
+          .setDescription('> Kullanıcı sunucuda bulunamadı.')
           .setTimestamp();
         
         return interaction.editReply({ embeds: [errorEmbed] });
@@ -97,9 +97,9 @@ module.exports = {
       const hasWhitelistedRole = targetMember.roles.cache.some(role => whitelistroller.includes(role.id));
       if (hasWhitelistedRole) {
         const errorEmbed = new EmbedBuilder()
-          .setColor(0xFF0000)
-          .setTitle('❌ Korumalı Kullanıcı')
-          .setDescription('```yaml\nBu kullanıcı korumalı bir role sahip olduğu için engellenemez.\n```')
+          .setColor(0x2F3136)
+          .setTitle('İşlem Geçersiz')
+          .setDescription('> Bu kullanıcı korumalı bir role sahip olduğu için engellenemez.')
           .setTimestamp();
         
         return interaction.editReply({ embeds: [errorEmbed] });
@@ -112,9 +112,9 @@ module.exports = {
 
       if (existingBlock) {
         const errorEmbed = new EmbedBuilder()
-          .setColor(0xFF0000)
-          .setTitle('❌ Zaten Engellenmiş')
-          .setDescription(`\`\`\`yaml\n${targetUser.username} kullanıcısı zaten bu forumda engellenmiş.\n\`\`\``)
+          .setColor(0x2F3136)
+          .setTitle('İşlem Geçersiz')
+          .setDescription(`> ${targetUser.username} kullanıcısı zaten bu forumda engellenmiş.`)
           .setTimestamp();
         
         return interaction.editReply({ embeds: [errorEmbed] });
@@ -132,16 +132,23 @@ module.exports = {
       });
 
       const successEmbed = new EmbedBuilder()
-        .setColor(0x00FF00)
-        .setTitle('✅ Kullanıcı Engellendi')
-        .setDescription(`\`\`\`yaml\nKullanıcı: ${targetUser.username}\nSebep: ${reason}\n\nBaşarıyla forum engeli uygulandı.\n\`\`\``)
+        .setColor(0x2F3136)
+        .setTitle('Kullanıcı Engellendi')
+        .setDescription(`> <@${targetUser.id}> kullanıcısına başarıyla forum engeli uygulandı.`)
         .setThumbnail(targetUser.displayAvatarURL())
         .addFields(
-          { name: 'Forum', value: `\`\`\`yaml\n${channel.name}\n\`\`\``, inline: true },
+          // Üst satır (kod bloğu ile)
+          { name: 'Kullanıcı', value: `\`\`\`ini\n${targetUser.username}\n\`\`\``, inline: true },
+          { name: 'Sebep', value: `\`\`\`ini\n${reason || 'Belirtilmedi'}\n\`\`\``, inline: true },
+          { name: 'Forum', value: `\`\`\`ini\n${channel.name}\n\`\`\``, inline: true },
+      
+          // Alt satır (normal)
           { name: 'Engelleme Zamanı', value: `<t:${Math.floor(Date.now() / 1000)}:R>`, inline: true },
           { name: 'Engeli Koyan', value: `<@${interaction.user.id}>`, inline: true }
         )
         .setTimestamp();
+      
+      
 
       if (photoUrl) {
         successEmbed.setImage(photoUrl);
@@ -161,9 +168,9 @@ module.exports = {
     } catch (error) {
       console.error('Engelleme hatası:', error);
       const errorEmbed = new EmbedBuilder()
-        .setColor(0xFF0000)
-        .setTitle('❌ Sistem Hatası')
-        .setDescription('```yaml\nKullanıcı engellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.\n```')
+        .setColor(0x2F3136)
+        .setTitle('Uyarı')
+        .setDescription('> Kullanıcı engellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.')
         .setTimestamp();
       
       return interaction.editReply({ embeds: [errorEmbed] });

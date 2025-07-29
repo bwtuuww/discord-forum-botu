@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 
 /**
- * YAML formatında bir embed mesajı oluşturur
+ * ini formatında bir embed mesajı oluşturur
  * @param {Object} options - Embed seçenekleri
  * @returns {EmbedBuilder} - Oluşturulan embed
  */
@@ -20,7 +20,7 @@ function createEmbed(options) {
   if (title) embed.setTitle(title);
   
   if (description) {
-    embed.setDescription(`\`\`\`yaml\n${description}\n\`\`\``);
+    embed.setDescription(`\`\`\`ini\n${description}\n\`\`\``);
   }
   
   embed.setColor(color);
@@ -45,7 +45,7 @@ function createEmbed(options) {
  */
 function createSuccessEmbed(message) {
   return createEmbed({
-    title: '✅ Başarılı',
+    title: 'Başarılı',
     description: message,
     color: 0x00FF00, // Yeşil
   });
@@ -56,7 +56,7 @@ function createSuccessEmbed(message) {
  */
 function createErrorEmbed(message) {
   return createEmbed({
-    title: '❌ Hata',
+    title: 'Hata',
     description: message,
     color: 0xFF0000, // Kırmızı
   });
@@ -67,7 +67,7 @@ function createErrorEmbed(message) {
  */
 function createInfoEmbed(message) {
   return createEmbed({
-    title: 'ℹ️ Bilgi',
+    title: 'ℹBilgi',
     description: message,
     color: 0x0099FF, // Mavi
   });

@@ -25,14 +25,18 @@ module.exports = {
         
         try {
           const blockEmbed = new EmbedBuilder()
-            .setColor(0xFF0000) // Kırmızı
-            .setTitle('⛔ Erişim Engellendi')
-            .setDescription(`\`\`\`yaml\nForum Kanalında Engeliniz Mevcut!\nKanal: ${thread.name}\nSebep: ${isBlocked.reason}\n\`\`\``)
+            .setColor(0x2F3136) // Gri
+            .setTitle('Erişim Reddedildi')
+            .setDescription(`> <@${message.author.id}> Bu forum kanalında engelli olduğunuz için mesajınız silindi.`)
             .setThumbnail(message.author.displayAvatarURL())
             .addFields(
-              { name: 'Engelleme Zamanı', value: `<t:${Math.floor(new Date(isBlocked.blockedAt).getTime() / 1000)}:R>`, inline: true },
-              { name: 'Forum Sahibi', value: `<@${isBlocked.forumOwnerId}>`, inline: true },
-              { name: 'Sunucu', value: message.guild.name, inline: true }
+              // Üst satır (kod bloğu ile)
+              { name: 'Kanal', value: `\`\`\`ini\n${thread.name}\n\`\`\``, inline: true },
+              { name: 'Sebep', value: `\`\`\`ini\n${isBlocked.reason || 'Belirtilmedi'}\n\`\`\``, inline: true },
+
+              // Alt satır (normal)
+              { name: 'Engelleme Zamanı', value: `<t:${Math.floor(new Date(isBlocked.blockedAt).getTime() / 1000)}:R>`, inline: false },
+              { name: 'Forum Sahibi', value: `<@${isBlocked.forumOwnerId}>`, inline: true }
             )
             .setTimestamp();
           
