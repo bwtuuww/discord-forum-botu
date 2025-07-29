@@ -1,24 +1,31 @@
-# Compiled class file
-*.class
+# Ortam değişkenleri
+.env
 
-# Log file
+# Bağımlılıklar
+node_modules/
+
+# Log dosyaları
+logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
-# BlueJ files
-*.ctxt
+# Çalışma zamanı veriler
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Önbellek dosyaları
+.npm
+.eslintcache
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# OS ve editör klasörleri
+.DS_Store
+.idea
+.vscode
+*.swp
+*.swo 
